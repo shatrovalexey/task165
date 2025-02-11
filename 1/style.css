@@ -1,25 +1,25 @@
 .hide {
-	display: none;
+    display: none;
 }
 .form-send-results {
-	border: 1px black solid;
+    border: 1px black solid;
 }
 .form-send-results:before {
-	content: attr(title);
-	font-weight: bold;
-	font-size: 120%;
-	display: block;
-	margin: 1%;
-	text-align: center;
+    content: attr(title);
+    font-weight: bold;
+    font-size: 120%;
+    display: block;
+    margin: 1%;
+    text-align: center;
 }
 .form-send-status {
-	padding: 2%;
-	border-radius: 50%;
-	display: inline-block;
+    padding: 2%;
+    border-radius: 50%;
+    display: inline-block;
 }
 .form-send-status-success {
-	background-color: green;
+    background-color: green;
 }
 .form-send-status-error {
-	background-color: red;
+    background-color: red;
 }

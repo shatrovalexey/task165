@@ -1,54 +1,54 @@
 <?php
 function response($data, $success = false): void
 {
-	http_response_code($success ? 200 : 400);
-	header('Content-Type: application/json');
+    http_response_code($success ? 200 : 400);
+    header('Content-Type: application/json');
 
-	echo json_encode($success ? ['data' => $data,] : ['error' => $data,]);
+    echo json_encode($success ? ['data' => $data,] : ['error' => $data,]);
 
-	exit;
+    exit;
 }
 
 if (!isset($_REQUEST['char']) || (mb_strlen($_REQUEST['char']) != 1)) {
-	response('Не передан "заданный символ"');
+    response('Не передан "заданный символ"');
 }
 if (empty($_FILES['file'])) {
-	response('Не передан файл');
+    response('Не передан файл');
 }
 if (
-	empty($_FILES['file']['tmp_name'])
-	|| !is_uploaded_file($_FILES['file']['tmp_name'])
+    empty($_FILES['file']['tmp_name'])
+    || !is_uploaded_file($_FILES['file']['tmp_name'])
 ) {
-	response('Не удалось загрузить файл');
+    response('Не удалось загрузить файл');
 }
 
 $filePath = tempnam('files', __LINE__);
 
 if (
-	!move_uploaded_file($_FILES['file']['tmp_name'], $filePath)
-	|| !($fh = fopen($filePath, 'rb'))
+    !move_uploaded_file($_FILES['file']['tmp_name'], $filePath)
+    || !($fh = fopen($filePath, 'rb'))
 ) {
-	response(error_get_last()['message']);
+    response(error_get_last()['message']);
 }
 
 [$digits, $lines, $line, $count,] = [range(0, 9), [], '', 0,];
 
 while (!feof($fh)) {
-	$char = fgetc($fh);
+    $char = fgetc($fh);
 
-	if ($char === $_REQUEST['char']) {
-		$lines[] = ['line' => $line, 'count' => $count,];
-		[$line, $count,] = ['', 0,];
+    if ($char === $_REQUEST['char']) {
+        $lines[] = ['line' => $line, 'count' => $count,];
+        [$line, $count,] = ['', 0,];
 
-		continue;
-	}
+        continue;
+    }
 
-	$line .= $char;
-	$count += in_array($char, $digits, true) ? 1 : 0;
+    $line .= $char;
+    $count += in_array($char, $digits, true) ? 1 : 0;
 }
 
 if (mb_strlen($line)) {
-	$lines[] = ['line' => $line, 'count' => $count,];
+    $lines[] = ['line' => $line, 'count' => $count,];
 }
 
 fclose($fh);
