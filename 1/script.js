@@ -5,7 +5,7 @@
     } = win;
 
     const nodeShow = (node, bool = true) => node.classList[bool ? "remove" : "add"]("hide");
-    const lineSeparator = "\n==============================================\n";
+    const lineSeparator = [,,].fill('\n', 0, 2).join('='.repeat(46));
 
     win.addEventListener(
         "DOMContentLoaded"
