@@ -9,27 +9,19 @@ function response($data, $success = false): void
     exit;
 }
 
-if (!isset($_REQUEST['char']) || (mb_strlen($_REQUEST['char']) != 1)) {
-    response('Не передан "заданный символ"');
-}
-if (empty($_FILES['file'])) {
-    response('Не передан файл');
-}
+if (!isset($_REQUEST['char']) || (mb_strlen($_REQUEST['char']) != 1)) response('Не передан "заданный символ"');
+if (empty($_FILES['file'])) response('Не передан файл');
 if (
     empty($_FILES['file']['tmp_name'])
     || !is_uploaded_file($_FILES['file']['tmp_name'])
-) {
-    response('Не удалось загрузить файл');
-}
+) response('Не удалось загрузить файл');
 
 $filePath = tempnam('files', __LINE__);
 
 if (
     !move_uploaded_file($_FILES['file']['tmp_name'], $filePath)
     || !($fh = fopen($filePath, 'rb'))
-) {
-    response(error_get_last()['message']);
-}
+) response(error_get_last()['message']);
 
 [$digits, $lines, $line, $count,] = [range(0, 9), [], '', 0,];
 
@@ -47,9 +39,7 @@ while (!feof($fh)) {
     $count += in_array($char, $digits, true) ? 1 : 0;
 }
 
-if (mb_strlen($line)) {
-    $lines[] = ['line' => $line, 'count' => $count,];
-}
+if (mb_strlen($line)) $lines[] = ['line' => $line, 'count' => $count,];
 
 fclose($fh);
 
